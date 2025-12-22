@@ -1,0 +1,142 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// --------------------------------------
+// 1. USUÁRIOS
+// --------------------------------------
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  emailVerified DateTime? @map("email_verified")
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  patients     Patient[]
+  appointments Appointment[]
+  documents    Document[]
+
+  sessions Session[]
+  accounts Account[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// --------------------------------------
+// 2. PACIENTES
+// --------------------------------------
+
+model Patient {
+  id          String    @id @default(cuid())
+  name        String
+  email       String?
+  phone       String?
+  dateOfBirth DateTime?
+  userId      String // Paciente pertence a um usuário (multitenancy simples)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  appointments Appointment[]
+  documents    Document[]
+
+  @@map("patients")
+}
+
+// --------------------------------------
+// 3. CONSULTAS
+// --------------------------------------
+
+model Appointment {
+  id        String            @id @default(cuid())
+  date      DateTime // Data e Hora da consulta
+  status    AppointmentStatus @default(SCHEDULED)
+  notes     String?           @db.Text // Anotações privadas da consulta
+  patientId String
+  userId    String
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("appointments")
+}
+
+enum AppointmentStatus {
+  SCHEDULED // Agendada
+  COMPLETED // Realizada
+  CANCELED // Cancelada
+}
+
+// --------------------------------------
+// 4. DOCUMENTOS
+// --------------------------------------
+
+model Document {
+  id                String    @id @default(cuid())
+  title             String // Ex: "Atestado de Comparecimento"
+  content           String // Pode ser HTML ou JSON do conteúdo
+  // Assinatura Digital
+  isSigned          Boolean   @default(false)
+  signedAt          DateTime?
+  signatureHash     String? // Hash do conteúdo para garantir integridade
+  verificationToken String?   @unique // Token curto para o QR Code/Link
+
+  patientId String
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("documents")
+}
