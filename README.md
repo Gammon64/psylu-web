@@ -48,37 +48,46 @@ src/
 
 ### 1. Clonar repositório
 
-```
+```cmd
 git clone <repo>
 cd psylu-web
 ```
 
 ### 2. Subir banco de dados
 
-```
+```cmd
 docker-compose up -d
 ```
 
 ### 3. Configurar variáveis
 
-Criar `.env`:
+Copiar e renomear arquivo `.env.example` para `.env` e preencher com as informações necessárias.
 
-```
-DATABASE_URL=postgresql://user:password@localhost:5432/psylu-web
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-NEXTAUTH_SECRET=
+```dotenv
+# POSTGRESQL CONFIG 
+DB_NAME=your_db
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+# Prisma
+DATABASE_URL="postgresql://your_username:your_password@localhost:5432/your_db?schema=public"
+
+# AUTH CONFIG
+AUTH_SECRET="# Added by `npx auth`. Read more: https://cli.authjs.dev"
+NEXTAUTH_URL=http://localhost:3000
+# Google Provider
+AUTH_GOOGLE_ID="Get from Google Cloud Console"
+AUTH_GOOGLE_SECRET="Get from Google Cloud Console"
 ```
 
 ### 4. Rodar migrations
 
-```
+```cmd
 npx prisma migrate dev
 ```
 
 ### 5. Rodar projeto
 
-```
+```cmd
 npm run dev
 ```
 
@@ -86,7 +95,7 @@ npm run dev
 
 ## 🧪 Testes
 
-```
+```cmd
 npm run test
 ```
 
