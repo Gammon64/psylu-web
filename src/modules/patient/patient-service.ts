@@ -4,6 +4,9 @@ export class PatientService {
   constructor(private repository: any) {}
 
   async create(data: unknown, userId: string) {
+    if (!userId) {
+      throw new Error("Unauthorized");
+    }
     const parsed = createPatientSchema.parse(data);
 
     return this.repository.create({
