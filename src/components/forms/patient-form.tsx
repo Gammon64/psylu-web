@@ -61,6 +61,15 @@ const PatientForm = ({ action }: PatientFormProps) => {
                 />
             </FormField>
 
+            <FormField label='Data de nascimento' >
+                <Input
+                    name="birthDate"
+                    type="date"
+                    defaultValue={state.birthDate || undefined}
+                    error={state.error?.properties?.birthDate}
+                />
+            </FormField>
+
             <FormError errors={state.error?.errors} />
 
             <Button

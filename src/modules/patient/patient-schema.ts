@@ -5,6 +5,7 @@ export type PatientFormState = DefaultState<{
   name: string;
   email?: string | null;
   phone?: string | null;
+  birthDate?: string | null;
 }>;
 
 export const createPatientSchema = z.object({

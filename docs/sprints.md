@@ -2,19 +2,20 @@
 
 ## 🟢 Sprint 1 — Fundação
 
-* Setup Next.js
-* Docker + PostgreSQL
-* Prisma schema inicial
-* NextAuth Google
-* Estrutura de pastas
+* Setup Next.js                     ✅
+* Docker + PostgreSQL               ✅
+* Prisma schema inicial             ✅
+* NextAuth Google                   ✅
+* Estrutura de pastas               ✅
+
 
 ---
 
 ## 🟡 Sprint 2 — Pacientes
 
-* CRUD completo
-* Validação com Zod
-* Testes unitários
+* CRUD completo                     ✅
+* Validação com Zod                 ✅
+* Testes unitários                  ✅
 
 ---
 
