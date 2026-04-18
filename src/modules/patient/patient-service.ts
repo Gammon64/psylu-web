@@ -1,3 +1,4 @@
+import { PatientCreateDTO } from "@/dto/patient/patient-create-dto";
 import { ZodErrorTree } from "@/lib/zod";
 import { PatientRepository } from "./patient-repository";
 import { createPatientSchema, updatePatientSchema } from "./patient-schema";
@@ -5,7 +6,7 @@ import { createPatientSchema, updatePatientSchema } from "./patient-schema";
 export class PatientService {
   constructor(private repository: PatientRepository) {}
 
-  async create(data: unknown, userId: string | undefined) {
+  async create(data: PatientCreateDTO, userId: string | undefined) {
     if (!userId) throw new Error("Unauthorized");
 
     const parsed = createPatientSchema.safeParse(data);
@@ -18,6 +19,7 @@ export class PatientService {
       return { ...res, success: true };
     } else {
       return {
+        ...data,
         error: ZodErrorTree(parsed.error),
       };
     }
