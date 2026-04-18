@@ -1,5 +1,6 @@
 import { PatientCreateDTO } from "@/dto/patient/patient-create-dto";
-import { ZodErrorTree } from "@/lib/zod";
+import { PatientUpdateDTO } from "@/dto/patient/patient-update-dto";
+import { validateAndExecute } from "@/lib/zod";
 import { PatientRepository } from "./patient-repository";
 import { createPatientSchema, updatePatientSchema } from "./patient-schema";
 
@@ -9,28 +10,25 @@ export class PatientService {
   async create(data: PatientCreateDTO, userId: string | undefined) {
     if (!userId) throw new Error("Unauthorized");
 
-    const parsed = createPatientSchema.safeParse(data);
-
-    if (parsed.success) {
-      const res = await this.repository.create({
-        ...parsed.data,
-        userId,
-      });
-      return { ...res, success: true };
-    } else {
-      return {
-        ...data,
-        error: ZodErrorTree(parsed.error),
-      };
-    }
+    return validateAndExecute(
+      createPatientSchema,
+      data,
+      async (parsed) =>
+        await this.repository.create({
+          ...parsed,
+          userId,
+        }),
+    );
   }
 
-  async update(id: string, data: unknown, userId: string | undefined) {
+  async update(id: string, data: PatientUpdateDTO, userId: string | undefined) {
     await this.getById(id, userId);
 
-    const parsed = updatePatientSchema.parse(data);
-
-    return this.repository.update(id, parsed);
+    return validateAndExecute(
+      updatePatientSchema,
+      data,
+      async (parsed) => await this.repository.update(id, parsed),
+    );
   }
 
   async delete(id: string, userId: string | undefined) {
