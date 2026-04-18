@@ -1,3 +1,6 @@
+import Card from "@/components/ui/card";
+import EmptyState from "@/components/ui/empty-state";
+import H1 from "@/components/ui/h1";
 import { getSession } from "@/lib/auth";
 import { PatientServiceBuilder } from "@/modules/patient";
 import Link from "next/link";
@@ -14,7 +17,7 @@ const PatientsPage = async () => {
 
     return (
         <div className="p-6 max-w-xl mx-auto space-y-6">
-            <h1 className="text-2xl font-bold">Pacientes</h1>
+            <H1>Pacientes</H1>
 
             <Link
                 href="/patients/new"
@@ -23,28 +26,28 @@ const PatientsPage = async () => {
                 + Novo paciente
             </Link>
 
-            <div className="space-y-3 w-full">
-                {patients.length === 0 && (
-                    <p className="text-gray-500">
-                        Nenhum paciente cadastrado ainda.
-                    </p>
-                )}
-
-                {patients.map((p) => (
-                    <div
-                        key={p.id}
-                        className="p-4 border rounded-xl"
-                    >
-                        <p className="font-semibold">{p.name}</p>
-                        <p className="text-sm text-gray-500">
-                            {p.email || "Sem email cadastrado"}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                            {p.phone || "Sem telefone cadastrado"}
-                        </p>
-                    </div>
-                ))}
-            </div>
+            {patients.length === 0 ? (
+                <EmptyState
+                    title="Nenhum paciente ainda"
+                    description="Comece cadastrando seu primeiro paciente"
+                    actionLabel="Cadastrar paciente"
+                    actionHref="/patients/new"
+                />
+            ) : (
+                <div className="space-y-3 w-full">
+                    {patients.map((p) => (
+                        <Card key={p.id}>
+                            <p className="font-semibold">{p.name}</p>
+                            <p className="text-sm text-gray-500">
+                                {p.email || "Sem email cadastrado"}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                                {p.phone || "Sem telefone cadastrado"}
+                            </p>
+                        </Card>
+                    ))}
+                </div>
+            )}
         </div>
     )
 }
