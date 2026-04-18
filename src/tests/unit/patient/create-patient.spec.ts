@@ -36,7 +36,16 @@ describe("Create Patient", () => {
       email: "maria@example.com",
     };
 
-    await expect(service.create(input, "user-1")).rejects.toThrow();
+    // Ao invés de disparar um erro, o método retorna um objeto com campo error com os campos errors: string[] e properties: ErrorProperties<PatientCreateDTO> 
+    await expect(service.create(input, "user-1")).resolves.toMatchObject({
+      error: {
+        properties: {
+          name: {
+            errors: expect.arrayContaining(["Nome é obrigatório"]),
+          },
+        },
+      },
+    });
   });
 
   it("should attach userId to patient", async () => {
