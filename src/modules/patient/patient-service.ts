@@ -1,3 +1,4 @@
+import { ZodErrorTree } from "@/lib/zod";
 import { PatientRepository } from "./patient-repository";
 import { createPatientSchema, updatePatientSchema } from "./patient-schema";
 
@@ -7,12 +8,19 @@ export class PatientService {
   async create(data: unknown, userId: string | undefined) {
     if (!userId) throw new Error("Unauthorized");
 
-    const parsed = createPatientSchema.parse(data);
+    const parsed = createPatientSchema.safeParse(data);
 
-    return this.repository.create({
-      ...parsed,
-      userId,
-    });
+    if (parsed.success) {
+      const res = await this.repository.create({
+        ...parsed.data,
+        userId,
+      });
+      return { ...res, success: true };
+    } else {
+      return {
+        error: ZodErrorTree(parsed.error),
+      };
+    }
   }
 
   async update(id: string, data: unknown, userId: string | undefined) {

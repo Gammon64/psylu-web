@@ -10,38 +10,15 @@ const NewPatientPage = () => {
     const createPatient = async (state: PatientFormState, data: FormData) => {
         "use server";
 
-        console.log("🚀 ~ createPatient ~ state:", state)
-
-
+        // TODO: tratar campos opcionais corretamente, enviar campos em branco como undefined para a API
         const patient = {
             name: String(data.get("name")),
             email: data.get("email") as string,
             phone: data.get("phone") as string
         }
 
-        // TODO: tratar campos opcionais corretamente, enviar campos em branco como undefined para a API
-        console.log("🚀 ~ createPatient ~ patient:", patient)
-
         const session = await getSession();
-        try {
-            const res = await PatientServiceBuilder().create(patient, session?.user?.id);
-
-            return {
-                ...res,
-                success: true
-            };
-        }
-        catch (err: Error | unknown) {
-            if (err instanceof Error)
-                return {
-                    ...state,
-                    error: err.message
-                }
-            return {
-                ...state,
-                error: "Ocorreu um erro inesperado"
-            }
-        }
+        return await PatientServiceBuilder().create(patient, session?.user?.id);
     };
 
     return (

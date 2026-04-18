@@ -38,7 +38,7 @@ const PatientForm = ({ action }: PatientFormProps) => {
                 <Input
                     name="name"
                     defaultValue={state.name}
-                    error={!!state.error && !state.name}
+                    error={state.error?.properties?.name}
                     required
                 />
             </FormField>
@@ -48,7 +48,7 @@ const PatientForm = ({ action }: PatientFormProps) => {
                     name="email"
                     type="email"
                     defaultValue={state.email || undefined}
-                    error={!!state.error && !state.email}
+                    error={state.error?.properties?.email}
                 />
             </FormField>
 
@@ -57,11 +57,11 @@ const PatientForm = ({ action }: PatientFormProps) => {
                     name="phone"
                     type="tel"
                     defaultValue={state.phone || undefined}
-                    error={!!state.error && !state.phone}
+                    error={state.error?.properties?.phone}
                 />
             </FormField>
 
-            <FormError message={state.error} />
+            <FormError errors={state.error?.errors} />
 
             <Button
                 type="submit"
