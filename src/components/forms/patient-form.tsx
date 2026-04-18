@@ -3,6 +3,11 @@
 import { PatientFormState } from '@/modules/patient/patient-schema';
 import { useRouter } from 'next/navigation';
 import { useActionState, useEffect } from 'react';
+import { toast } from 'sonner';
+import Button from '../ui/button';
+import FormError from '../ui/form-error';
+import FormField from '../ui/form-field';
+import Input from '../ui/input';
 
 type PatientFormProps = {
     action: (state: PatientFormState, data: FormData) => Promise<PatientFormState>;
@@ -19,7 +24,7 @@ const PatientForm = ({ action }: PatientFormProps) => {
 
     useEffect(() => {
         if (state.success) {
-            alert("Paciente criado com sucesso!");
+            toast.message("Paciente criado com sucesso!");
             router.push("/patients");
         }
     }, [state.success]);
@@ -29,44 +34,41 @@ const PatientForm = ({ action }: PatientFormProps) => {
             action={formAction}
             className="flex flex-col gap-4"
         >
-            <input
-                id="name"
-                name="name"
-                placeholder="Nome completo"
-                defaultValue={state.name}
-                className="p-3 border rounded-lg"
-                required
-            />
+            <FormField label='Nome' >
+                <Input
+                    name="name"
+                    defaultValue={state.name}
+                    error={!!state.error && !state.name}
+                    required
+                />
+            </FormField>
 
-            <input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Email (opcional)"
-                defaultValue={state.email || undefined}
-                className="p-3 border rounded-lg"
-            />
+            <FormField label='Email' >
+                <Input
+                    name="email"
+                    type="email"
+                    defaultValue={state.email || undefined}
+                    error={!!state.error && !state.email}
+                />
+            </FormField>
 
-            <input
-                id="phone"
-                name="phone"
-                type="tel"
-                placeholder="Telefone (opcional)"
-                defaultValue={state.phone || undefined}
-                className="p-3 border rounded-lg"
-            />
+            <FormField label='Telefone' >
+                <Input
+                    name="phone"
+                    type="tel"
+                    defaultValue={state.phone || undefined}
+                    error={!!state.error && !state.phone}
+                />
+            </FormField>
 
-            {state.error && (
-                <span className='text-sm text-red-500'>{state.error}</span>
-            )}
+            <FormError message={state.error} />
 
-            <button
+            <Button
                 type="submit"
-                disabled={pending}
-                className="p-4 bg-blue-600 text-white rounded-xl text-lg"
+                loading={pending}
             >
-                {pending ? "Salvando..." : "Salvar paciente"}
-            </button>
+                Salvar paciente
+            </Button>
         </form>
     )
 }

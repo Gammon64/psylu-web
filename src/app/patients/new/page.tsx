@@ -1,4 +1,5 @@
 import PatientForm from "@/components/forms/patient-form";
+import H1 from "@/components/ui/h1";
 import { getSession } from "@/lib/auth";
 import { PatientServiceBuilder } from "@/modules/patient";
 import { PatientFormState } from "@/modules/patient/patient-schema";
@@ -45,9 +46,9 @@ const NewPatientPage = () => {
 
     return (
         <div className="p-6 max-w-xl mx-auto space-y-6">
-            <h1 className="text-2xl font-bold">
+            <H1>
                 Novo paciente
-            </h1>
+            </H1>
 
             <PatientForm action={createPatient} />
         </div>
