@@ -28,5 +28,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 });
 
 export async function getSession() {
-  return await auth();
+  const session = await auth();
+  if (!session) throw new Error("Unauthorized");
+  return session;
 }

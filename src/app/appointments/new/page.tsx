@@ -7,7 +7,6 @@ import { PatientServiceBuilder } from '@/modules/patient'
 
 async function getPatients() {
     const session = await getSession();
-    if (!session) throw new Error("Unauthorized");
 
     return await PatientServiceBuilder().list(session?.user.id);
 }
@@ -19,7 +18,6 @@ const NewAppointmentPage = async () => {
         "use server"
 
         const session = await getSession()
-        if (!session) return { error: "Unauthorized" }
 
         try {
             const appointment: AppointmentCreateDTO = {

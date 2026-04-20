@@ -7,7 +7,6 @@ import Link from "next/link";
 
 async function getPatients() {
     const session = await getSession();
-    if (!session) throw new Error("Unauthorized");
 
     return await PatientServiceBuilder().list(session?.user.id);
 }

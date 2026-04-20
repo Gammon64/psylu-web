@@ -7,8 +7,6 @@ import Link from "next/link"
 
 async function getAppointments(day: Date) {
     const session = await getSession()
-    if (!session) throw new Error("Unauthorized")
-
 
     return AppointmentServiceBuilder().listByDay(
         day,
@@ -67,7 +65,7 @@ const AppointmentsPage = async ({
             ) : (
                 <div className="space-y-3">
                     {appointments.map((a) => (
-                        <Card key={a.id}>
+                        <Card key={a.id} href={`/appointments/${a.id}`}>
                             <p className="font-semibold">
                                 {formatFullDate(a.scheduledAt)}
                             </p>

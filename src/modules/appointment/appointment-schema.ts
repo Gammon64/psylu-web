@@ -13,6 +13,10 @@ export const createAppointmentSchema = z.object({
   durationMin: z.number().min(50, "Duração mínima de 50 minutos"),
 });
 
+export type AppointmentNotesFormState = DefaultState<{
+  notes: string;
+}>;
+
 export const updateAppointmentSchema = createAppointmentSchema.partial().and(
   z.object({
     notes: z.string().optional(),
