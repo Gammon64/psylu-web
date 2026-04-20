@@ -12,6 +12,20 @@ export class AppointmentService {
   async create(data: AppointmentCreateDTO, userId: string | undefined) {
     if (!userId) throw new Error("Unauthorized");
 
+    // Confere se o horário já está ocupado
+    const existing = await this.repository.findByScheduledAtAndUserId(
+      data.scheduledAt,
+      userId,
+    );
+
+    if (existing) {
+      return {
+        error: {
+          errors: ["Horário já ocupado"],
+        },
+      };
+    }
+
     return validateAndExecute(
       createAppointmentSchema,
       data,
@@ -45,10 +59,10 @@ export class AppointmentService {
     return this.repository.findAll(patientId);
   }
 
-  async listByDay(date: Date, userId: string | undefined){
+  async listByDay(date: Date, userId: string | undefined) {
     if (!userId) throw new Error("Unauthorized");
 
-    return this.repository.findByScheduledAtAndUserId(date, userId);
+    return this.repository.findByDayAndUserId(date, userId);
   }
 
   async getById(id: string, userId: string | undefined) {

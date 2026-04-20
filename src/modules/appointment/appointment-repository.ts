@@ -38,6 +38,15 @@ export class AppointmentRepository {
   }
 
   async findByScheduledAtAndUserId(date: Date, userId: string) {
+    return prisma.appointment.findFirst({
+      where: {
+        scheduledAt: date,
+        userId,
+      },
+    });
+  }
+
+  async findByDayAndUserId(date: Date, userId: string) {
     const brazilDate = new TZDate(date, "America/Sao_Paulo");
     const dateInicio = startOfDay(brazilDate);
     const dateFim = endOfDay(brazilDate);

@@ -16,7 +16,8 @@ const Button = ({
       {...props}
       disabled={disabled || loading}
       className={clsx(
-        "p-4 rounded-xl text-lg text-white transition",
+        "flex gap-4 w-full text-center items-center justify-center",
+        "p-4 rounded-xl text-lg text-white transition cursor-pointer",
         "bg-blue-600 hover:bg-blue-700",
         "disabled:opacity-50 disabled:cursor-not-allowed",
         className
