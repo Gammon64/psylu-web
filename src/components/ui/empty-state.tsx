@@ -9,7 +9,7 @@ type EmptyStateProps = {
 
 const EmptyState = ({ title, description, actionLabel, actionHref }: EmptyStateProps) => {
     return (
-        <div className="text-center py-10 border rounded-xl">
+        <div className="text-center px-4 py-10 border rounded-xl">
             <h2 className="text-lg font-semibold">{title}</h2>
 
             {description && (

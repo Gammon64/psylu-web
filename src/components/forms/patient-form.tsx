@@ -24,7 +24,7 @@ const PatientForm = ({ action }: PatientFormProps) => {
 
     useEffect(() => {
         if (state.success) {
-            toast.message("Paciente criado com sucesso!");
+            toast.success("Paciente criado com sucesso!");
             router.push("/patients");
         }
     }, [state.success]);

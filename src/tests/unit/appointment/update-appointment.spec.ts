@@ -19,6 +19,7 @@ describe("Update Appointment", () => {
       id: "1",
       userId: "user-1",
     });
+
     repository.update.mockResolvedValue({
       id: "1",
       scheduledAt: "Updated ScheduledAt",

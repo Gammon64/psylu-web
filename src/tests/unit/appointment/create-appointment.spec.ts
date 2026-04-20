@@ -1,6 +1,5 @@
 import {
-  AppointmentCreateDTO,
-  AppointmentStatus,
+  AppointmentCreateDTO
 } from "@/dto/appointment/appointment-create-dto";
 import { AppointmentService } from "@/modules/appointment/appointment-service";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -22,7 +21,6 @@ describe("Create Appointment", () => {
       patientId: "patient-1",
       scheduledAt: new Date("2026-04-24T09:20:00.000Z"),
       durationMin: 60,
-      status: AppointmentStatus.SCHEDULED,
     };
 
     repository.create.mockResolvedValue({
@@ -41,7 +39,6 @@ describe("Create Appointment", () => {
       patientId: "",
       scheduledAt: new Date("2026-04-24T09:20:00.000Z"),
       durationMin: 60,
-      status: AppointmentStatus.SCHEDULED,
     };
 
     await expect(service.create(input, "user-1")).resolves.toMatchObject({

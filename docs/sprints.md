@@ -21,8 +21,8 @@
 
 ## 🔵 Sprint 3 — Agenda
 
-* CRUD consultas
-* UI calendário simples
+* CRUD consultas                    ✅
+* UI calendário simples             ✅
 * Relacionamento paciente
 
 ---

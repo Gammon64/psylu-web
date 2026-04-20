@@ -45,6 +45,12 @@ export class AppointmentService {
     return this.repository.findAll(patientId);
   }
 
+  async listByDay(date: Date, userId: string | undefined){
+    if (!userId) throw new Error("Unauthorized");
+
+    return this.repository.findByScheduledAtAndUserId(date, userId);
+  }
+
   async getById(id: string, userId: string | undefined) {
     const appointment = await this.repository.findById(id);
 
