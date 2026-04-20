@@ -1,5 +1,7 @@
 "use client";
 
+import { PatientGetPayload } from '@/generated/prisma/models';
+import { formatDateParam } from '@/lib/date';
 import { PatientFormState } from '@/modules/patient/patient-schema';
 import { useRouter } from 'next/navigation';
 import { useActionState, useEffect } from 'react';
@@ -11,10 +13,20 @@ import Input from '../ui/input';
 
 type PatientFormProps = {
     action: (state: PatientFormState, data: FormData) => Promise<PatientFormState>;
+    patient?: PatientGetPayload<{
+        include: {
+            appointments: true;
+        }
+    }>;
 }
 
-const PatientForm = ({ action }: PatientFormProps) => {
-    const initialState: PatientFormState = {
+const PatientForm = ({ action, patient }: PatientFormProps) => {
+    const initialState: PatientFormState = patient ? {
+        name: patient.name,
+        email: patient.email,
+        phone: patient.phone,
+        birthDate: patient.birthDate
+    } : {
         name: ""
     }
 
@@ -65,7 +77,7 @@ const PatientForm = ({ action }: PatientFormProps) => {
                 <Input
                     name="birthDate"
                     type="date"
-                    defaultValue={state.birthDate || undefined}
+                    defaultValue={state.birthDate ? formatDateParam(state.birthDate) : undefined}
                     error={state.error?.properties?.birthDate}
                 />
             </FormField>

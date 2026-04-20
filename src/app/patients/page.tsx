@@ -35,7 +35,7 @@ const PatientsPage = async () => {
             ) : (
                 <div className="space-y-3 w-full">
                     {patients.map((p) => (
-                        <Card key={p.id}>
+                        <Card key={p.id} href={`/patients/${p.id}`}>
                             <p className="font-semibold">{p.name}</p>
                             <p className="text-sm text-gray-500">
                                 {p.email || "Sem email cadastrado"}
@@ -46,8 +46,9 @@ const PatientsPage = async () => {
                         </Card>
                     ))}
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
     )
 }
 

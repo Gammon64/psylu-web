@@ -8,6 +8,9 @@ export class PatientRepository {
   async findById(id: string) {
     return prisma.patient.findUnique({
       where: { id },
+      include: {
+        appointments: true,
+      },
     });
   }
 
