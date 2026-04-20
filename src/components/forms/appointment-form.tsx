@@ -19,7 +19,7 @@ const AppointmentForm = ({ action, patients }: AppointmentFormProps) => {
     const initialState: AppointmentFormState = {
         patientId: "",
         scheduledAt: new Date(),
-        durationMin: 0
+        durationMin: 50
     }
 
     const [state, formAction, pending] = useActionState(action, initialState);
@@ -55,7 +55,7 @@ const AppointmentForm = ({ action, patients }: AppointmentFormProps) => {
                 <Input
                     type="datetime-local"
                     name="scheduledAt"
-                    defaultValue={state.scheduledAt.toUTCString()}
+                    defaultValue={state.scheduledAt?.toUTCString()}
                     error={state.error?.properties?.scheduledAt}
                     required
                 />
@@ -65,7 +65,7 @@ const AppointmentForm = ({ action, patients }: AppointmentFormProps) => {
                 <Input
                     type="number"
                     name="durationMin"
-                    defaultValue={state.durationMin ?? 50}
+                    defaultValue={state.durationMin}
                     min={50}
                     error={state.error?.properties?.durationMin}
                     required
