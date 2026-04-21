@@ -2,6 +2,7 @@ import { Patient } from '@/generated/prisma/client'
 import { getSession } from '@/lib/auth'
 import { formatFullDate, formatHour } from '@/lib/date'
 import { AppointmentServiceBuilder } from '@/modules/appointment'
+import clsx from 'clsx'
 import Link from 'next/link'
 import Card from '../ui/card'
 import EmptyState from '../ui/empty-state'
@@ -50,10 +51,26 @@ const AppointmentList = async ({ date, patient }: AppointmentListProps) => {
             ) : (
                 <div className="space-y-3">
                     {appointments.map((a) => (
-                        <Card key={a.id} href={`/appointments/${a.id}`}>
-                            <p className="font-semibold">
-                                {formatFullDate(a.scheduledAt)}
-                            </p>
+                        <Card key={a.id} href={`/appointments/${a.id}`} className={
+                            clsx(
+                                a.status === 'COMPLETED' ? "border-green-500"
+                                    : a.status === 'CANCELED' ? "border-red-500"
+                                        : "border-gray-300"
+                            )
+                        }>
+                            <header className='flex w-full justify-between'>
+                                <p className="font-semibold">
+                                    {formatFullDate(a.scheduledAt)}
+                                </p>
+                                <span className={clsx('rounded-full px-2 py-1 text-xs text-black font-bold',
+                                    a.status === 'COMPLETED' ? "bg-green-500"
+                                        : a.status === 'CANCELED' ? "bg-red-500"
+                                            : "bg-gray-300",
+                                )}>
+                                    {a.status}
+                                </span>
+                            </header>
+
                             <p className="font-semibold">
                                 {formatHour(a.scheduledAt)}
                             </p>

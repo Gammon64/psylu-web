@@ -1,5 +1,6 @@
 import AppointmentList from "@/components/lists/appointment-list"
-import { addDays, formatDateParam, formatFullDate, parseDateParam } from "@/lib/date"
+import { formatDateParam, formatFullDate, parseDateParam } from "@/lib/date"
+import { addDays } from "date-fns"
 import Link from "next/link"
 
 
@@ -9,6 +10,7 @@ const AppointmentsPage = async ({
 }: {
     searchParams: Promise<{ date?: string }>
 }) => {
+    // TODO: handle timezone properly
     const currentDate = parseDateParam((await searchParams).date)
 
     const prevDate = addDays(currentDate, -1)
