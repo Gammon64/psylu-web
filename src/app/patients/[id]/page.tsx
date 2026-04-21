@@ -1,4 +1,5 @@
 import PatientForm from "@/components/forms/patient-form";
+import AppointmentList from "@/components/lists/appointment-list";
 import H1 from "@/components/ui/h1";
 import { getSession } from "@/lib/auth";
 import { PatientServiceBuilder } from "@/modules/patient";
@@ -35,6 +36,10 @@ const PatientPage = async ({ params }: { params: Promise<{ id: string }> }) => {
             </H1>
 
             <PatientForm action={updatePatient} patient={patient} />
+            
+            <h2>Consultas</h2>
+
+            <AppointmentList patient={patient}/>
         </div>
     )
 }

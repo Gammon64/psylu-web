@@ -34,6 +34,13 @@ export class AppointmentRepository {
       where: {
         patientId,
       },
+      include: {
+        patient: {
+          select: {
+            name: true,
+          },
+        },
+      },
       orderBy: {
         createdAt: "asc",
       },
@@ -49,7 +56,7 @@ export class AppointmentRepository {
     });
   }
 
-  async findByDayAndUserId(date: Date, userId: string) {
+  async findByDayAndUserId(date: Date, userId: string, patientId?: string) {
     const brazilDate = new TZDate(date, "America/Sao_Paulo");
     const dateInicio = startOfDay(brazilDate);
     const dateFim = endOfDay(brazilDate);
@@ -62,6 +69,7 @@ export class AppointmentRepository {
           lte: dateFim,
         },
         patient: {
+          id: patientId,
           isActive: true,
         },
       },

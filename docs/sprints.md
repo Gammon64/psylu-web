@@ -23,13 +23,14 @@
 
 * CRUD consultas                    ✅
 * UI calendário simples             ✅
-* Relacionamento paciente
+* Relacionamento paciente           ✅
+
 
 ---
 
 ## 🟣 Sprint 4 — Anamnese
 
-* Tela de consulta
+* Tela de consulta                  ✅
 * Histórico por paciente
 
 ---

@@ -59,10 +59,10 @@ export class AppointmentService {
     return this.repository.findAll(patientId);
   }
 
-  async listByDay(date: Date, userId: string | undefined) {
+  async listByDay(date: Date, userId: string | undefined, patientId?: string) {
     if (!userId) throw new Error("Unauthorized");
 
-    return this.repository.findByDayAndUserId(date, userId);
+    return this.repository.findByDayAndUserId(date, userId, patientId);
   }
 
   async getById(id: string, userId: string | undefined) {
