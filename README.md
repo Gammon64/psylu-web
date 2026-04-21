@@ -1,4 +1,4 @@
-# 🧠 PsychCare - Sistema de Gestão para Psicólogos
+# 🧠 Psylu - Sistema de Gestão para Psicólogos
 
 ## 📌 Visão Geral
 
