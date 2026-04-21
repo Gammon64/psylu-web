@@ -1,3 +1,4 @@
+import { AppointmentStatus } from "@/generated/prisma/enums";
 import { DefaultState } from "@/types/error-properties";
 import { z } from "zod";
 
@@ -20,5 +21,6 @@ export type AppointmentNotesFormState = DefaultState<{
 export const updateAppointmentSchema = createAppointmentSchema.partial().and(
   z.object({
     notes: z.string().optional(),
+    status: z.enum(AppointmentStatus),
   }),
 );

@@ -1,9 +1,7 @@
 import AppointmentNotesForm from '@/components/forms/appointment-notes-form';
-import { AppointmentStatus } from '@/generated/prisma/enums';
 import { getSession } from '@/lib/auth';
 import { formatFullDate } from '@/lib/date';
 import { AppointmentServiceBuilder } from '@/modules/appointment';
-import { AppointmentNotesFormState } from '@/modules/appointment/appointment-schema';
 
 
 const getAppointment = async (id: string) => {
@@ -19,22 +17,6 @@ const AppointmentPage = async ({
 }) => {
     const appointment = await getAppointment((await params).id);
 
-    const updateAppointment = async (state: AppointmentNotesFormState, data: FormData) => {
-        "use server";
-        const session = await getSession();
-
-        const appointment = {
-            notes: String(data.get("notes")),
-            status: AppointmentStatus.COMPLETED
-        };
-
-        return await AppointmentServiceBuilder().update(
-            (await params).id,
-            appointment,
-            session.user.id
-        );
-    }
-
     return (
         <div className="p-6 max-w-xl mx-auto space-y-6">
 
@@ -48,7 +30,7 @@ const AppointmentPage = async ({
                 </p>
             </div>
 
-            <AppointmentNotesForm action={updateAppointment} appointment={appointment} />
+            <AppointmentNotesForm appointment={appointment} />
         </div>
     )
 }

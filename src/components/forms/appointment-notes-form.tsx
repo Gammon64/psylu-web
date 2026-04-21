@@ -1,14 +1,14 @@
 "use client";
 
+import { AppointmentStatus } from '@/generated/prisma/enums';
 import { AppointmentGetPayload } from '@/generated/prisma/models';
 import useDebounce from '@/hooks/use-debounce';
-import { AppointmentNotesFormState } from '@/modules/appointment/appointment-schema';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import Button from '../ui/button';
 
 type AppointmentNotesFormProps = {
-    action: (state: AppointmentNotesFormState, data: FormData) => Promise<AppointmentNotesFormState>;
     appointment: AppointmentGetPayload<{
         include: {
             patient: true;
@@ -16,59 +16,63 @@ type AppointmentNotesFormProps = {
     }>;
 }
 
-const AppointmentNotesForm = ({ action, appointment }: AppointmentNotesFormProps) => {
+const AppointmentNotesForm = ({ appointment }: AppointmentNotesFormProps) => {
     const [notes, setNotes] = useState(appointment.notes || "");
     const [pending, setPending] = useState(false);
-    const initialState: AppointmentNotesFormState = {
-        notes: appointment.notes || "",
-    }
 
     const debouncedNotes = useDebounce(notes, 1500);
+    const router = useRouter();
 
-    useEffect(() => {
-        if (debouncedNotes === appointment.notes) return;
-
-        const save = async () => {
-            const res = await fetch(`/api/appointments/${appointment.id}`, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ notes: debouncedNotes })
-            });
-
-            if (!res.ok) {
-                toast.error("Erro ao salvar automaticamente");
-            }
-        }
-
-        save();
-    }, [debouncedNotes])
-
-    const formAction = async (data: FormData) => {
-        setPending(true);
-
+    const save = async (body: any) => {
         const res = await fetch(`/api/appointments/${appointment.id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ notes: debouncedNotes })
+            body: JSON.stringify(body)
         });
 
         if (!res.ok) {
-            toast.error("Erro ao salvar automaticamente");
-        }
-        if (!res.ok)
             toast.error("Erro ao salvar anamnese!");
+        }
+
+        router.refresh();
+    }
+
+    useEffect(() => {
+        if (debouncedNotes === appointment.notes) return;
+        save({ notes: debouncedNotes });
+    }, [debouncedNotes])
+
+    const formAction = async (data: FormData) => {
+        setPending(true);
+
+        const body = {
+            notes: String(data.get("notes")),
+            status: AppointmentStatus.COMPLETED
+        }
+        await save(body);
 
         setPending(false);
-        toast.success("Anamnese salva com sucesso!");
+    }
+
+    const handleCancelAppointment = async () => {
+        const body = {
+            status: AppointmentStatus.CANCELED
+        }
+
+        await save(body);
     }
 
     return (
         <form action={formAction} className="flex flex-col gap-4">
-
+            <Button
+                type='button'
+                className='bg-rose-700 hover:bg-rose-900'
+                disabled={appointment.status !== AppointmentStatus.SCHEDULED}
+                onClick={() => handleCancelAppointment()}>
+                Cancelar consulta
+            </Button>
             <textarea
                 name="notes"
                 value={notes}
@@ -82,7 +86,7 @@ const AppointmentNotesForm = ({ action, appointment }: AppointmentNotesFormProps
                     : "Nenhuma nota salva ainda."}
             </span>
 
-            <Button type="submit" loading={pending}>
+            <Button type="submit" loading={pending} disabled={appointment.status === AppointmentStatus.CANCELED}>
                 Salvar anamnese
             </Button>
         </form>
