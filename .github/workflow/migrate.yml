@@ -3,7 +3,7 @@ name: Run Prisma Migrations
 on:
   push:
     branches:
-      - main
+      - stage
 
 jobs:
   migrate:
