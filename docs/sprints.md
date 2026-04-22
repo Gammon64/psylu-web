@@ -31,20 +31,20 @@
 ## 🟣 Sprint 4 — Anamnese
 
 * Tela de consulta                  ✅
-* Histórico por paciente
+* Histórico por paciente            ✅
 
 ---
 
 ## 🔴 Sprint 5 — UX e Refinamento
 
 * Melhorias visuais
-* Feedbacks
+* Feedbacks                         ✅
 * Acessibilidade
 
 ---
 
 ## ⚫ Sprint 6 — Segurança e Deploy
 
-* Variáveis por ambiente
+* Variáveis por ambiente            ✅
 * Hardening
 * Deploy (Vercel + DB gerenciado)
