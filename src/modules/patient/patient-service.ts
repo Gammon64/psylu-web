@@ -52,4 +52,15 @@ export class PatientService {
 
     return patient;
   }
+
+  async getByIdWithHistory(id: string, userId: string | undefined) {
+    const patient = await this.repository.findByIdWithCompletedAppointments(id);
+
+    if (!patient || patient.userId !== userId) {
+      throw new Error("Unauthorized");
+    }
+
+    return patient;
+  }
+
 }

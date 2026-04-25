@@ -13,20 +13,38 @@ datasource db {
 }
 
 model User {
-  id    String  @id @default(cuid())
-  name  String?
-  email String  @unique
-  image String?
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  image         String?
   emailVerified DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  profile Profile?
 
   accounts Account[]
   sessions Session[]
 
   patients     Patient[]
   appointments Appointment[]
+}
+
+model Profile {
+  id     String @id @default(cuid())
+  userId String @unique
+
+  displayName String
+  crp         String?
+
+  logoUrl      String?
+  signatureUrl String?
+
+  primaryColor   String? // identidade visual
+  secondaryColor String?
+
+  user User @relation(fields: [userId], references: [id])
 }
 
 model Patient {

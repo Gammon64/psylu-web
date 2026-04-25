@@ -1,3 +1,4 @@
+import { AppointmentStatus } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 
 export class PatientRepository {
@@ -10,6 +11,22 @@ export class PatientRepository {
       where: { id },
       include: {
         appointments: true,
+      },
+    });
+  }
+
+  async findByIdWithCompletedAppointments(id: string) {
+    return prisma.patient.findUnique({
+      where: { id },
+      include: {
+        appointments: {
+          where: {
+            status: AppointmentStatus.COMPLETED,
+            notes: {
+              not: null,
+            },
+          },
+        },
       },
     });
   }
