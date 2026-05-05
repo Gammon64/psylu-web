@@ -7,7 +7,7 @@ const Profile = async ({ userId }: { userId: string }) => {
 
     return (
         <div className="flex gap-2 h-full justify-center items-center">
-            {profile.logoUrl && <Image src={profile.logoUrl} alt="Profile" width={40} height={40} />}
+            {profile.logoPreviewUrl && <Image src={profile.logoPreviewUrl} alt="Profile" width={40} height={40} />}
             <span className="text-sm font-semibold">{profile.displayName}</span>
         </div>
     )

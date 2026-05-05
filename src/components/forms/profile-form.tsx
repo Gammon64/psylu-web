@@ -9,12 +9,12 @@ import Button from "../ui/button";
 import ColorPicker from "../ui/color-picker";
 import FormError from "../ui/form-error";
 import FormField from "../ui/form-field";
-import Input from "../ui/input";
 import ImageUploader from "../ui/image-uploader";
+import Input from "../ui/input";
 
 type ProfileFormProps = {
     action: (state: ProfileFormState, data: FormData) => Promise<ProfileFormState>;
-    profile?: Profile | null;
+    profile?: Profile & { logoPreviewUrl: string | null; signaturePreviewUrl: string | null } | null;
 }
 
 const ProfileForm = ({ action, profile }: ProfileFormProps) => {
@@ -32,6 +32,7 @@ const ProfileForm = ({ action, profile }: ProfileFormProps) => {
             router.push("/dashboard");
         }
     }, [state.success])
+
     return (
         <form action={formAction} className="flex flex-col gap-4">
             <FormField label="Nome de Exibição">
@@ -54,16 +55,20 @@ const ProfileForm = ({ action, profile }: ProfileFormProps) => {
             <FormField label="URL do Logo">
                 <ImageUploader
                     name="logoUrl"
-                    defaultValue={state.logoUrl ?? ""}
+                    defaultValue={state.logoUrl ?? undefined}
+                    previewUrl={state.logoPreviewUrl}
                     error={state.error?.properties?.logoUrl}
+                    accept={"image/png, image/jpeg"}
                 />
             </FormField>
 
             <FormField label="URL da Assinatura">
                 <ImageUploader
                     name="signatureUrl"
-                    defaultValue={state.signatureUrl ?? ""}
+                    defaultValue={state.signatureUrl ?? undefined}
+                    previewUrl={state.signaturePreviewUrl}
                     error={state.error?.properties?.signatureUrl}
+                    accept={"image/png, image/jpeg"}
                 />
             </FormField>
 

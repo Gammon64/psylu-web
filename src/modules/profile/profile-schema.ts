@@ -5,7 +5,9 @@ export type ProfileFormState = DefaultState<{
   displayName: string;
   crp?: string | null;
   logoUrl?: string | null;
+  logoPreviewUrl?: string | null;
   signatureUrl?: string | null;
+  signaturePreviewUrl?: string | null;
   primaryColor?: string | null;
   secondaryColor?: string | null;
 }>;

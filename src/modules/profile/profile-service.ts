@@ -1,4 +1,5 @@
 import { ProfileUpdateDTO } from "@/dto/profile/profile-update-dto";
+import { getSignedReadUrl } from "@/lib/gcs";
 import { validateAndExecute } from "@/lib/zod";
 import { ProfileRepository } from "./profile-repository";
 import { updateProfileSchema } from "./profile-schema";
@@ -29,6 +30,19 @@ export class ProfileService {
   async getByUserId(userId: string | undefined) {
     if (!userId) throw new Error("Unauthorized");
 
-    return this.repository.findByUserId(userId);
+    const profile = await this.repository.findByUserId(userId);
+
+    if (!profile) throw new Error("Not found");
+
+    // Carrega URL de leitura
+    return {
+      ...profile,
+      logoPreviewUrl: profile?.logoUrl?.includes("googleapis")
+        ? await getSignedReadUrl(profile.logoUrl)
+        : profile.logoUrl,
+      signaturePreviewUrl: profile?.signatureUrl?.includes("googleapis")
+        ? await getSignedReadUrl(profile.signatureUrl)
+        : profile.signatureUrl,
+    };
   }
 }
